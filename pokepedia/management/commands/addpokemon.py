@@ -77,6 +77,7 @@ class Command(BaseCommand):
                         )
                     )
 
+            evolution_chains = {}
             for pokemon_index in range(1, 152):
                 response = get(f"{base_api_url}/pokemon/{pokemon_index}")
                 response.raise_for_status()
@@ -99,6 +100,9 @@ class Command(BaseCommand):
                     json_species_response["genera"],
                     "genus",
                 )
+
+                evolution_chain_url = json_species_response["evolution_chain"]["url"]
+                evolution_chains[pokemon_name] = evolution_chain_url
 
                 pokemon_resource = Pokemon(
                     image=pokemon_sprite,
@@ -123,6 +127,18 @@ class Command(BaseCommand):
                     )
                 )
 
+            processed_chains = set()
+            for pokemon_name, evolution_chain_url in evolution_chains.items():
+                if evolution_chain_url in processed_chains:
+                    continue
+
+                response = get(evolution_chain_url)
+                response.raise_for_status()
+                chain_data = response.json()
+
+                # Process the evolution chain
+                self._process_evolution_chain(chain_data["chain"])
+                processed_chains.add(evolution_chain_url)
         except HTTPError as http_err:
             self.stderr.write(self.style.ERROR(http_err))
             raise CommandError("ERROR: Failed to retrieve data from API.")
@@ -140,3 +156,23 @@ class Command(BaseCommand):
                 return entry[key]
 
         return entry_list[0][key]
+
+    def _process_evolution_chain(self, chain_data, parent=None):
+        species_name = chain_data["species"]["name"]
+        try:
+            current_pokemon = Pokemon.objects.get(name=species_name)
+
+            # If there's a parent, add it to evolutions
+            if parent:
+                current_pokemon.evolutions.add(parent)
+                self.stdout.write(
+                    self.style.SUCCESS(
+                        f"SUCCESS: added evolution relationship {species_name} -> {parent.name}"
+                    )
+                )
+
+            for evolution in chain_data["evolves_to"]:
+                self._process_evolution_chain(evolution, current_pokemon)
+
+        except Pokemon.DoesNotExist:
+            pass
