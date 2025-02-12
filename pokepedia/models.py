@@ -4,12 +4,13 @@ from django.db import models
 # Create your models here.
 class Pokemon(models.Model):
     image = models.URLField()
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     genus = models.CharField(max_length=50)
     types = models.ManyToManyField("pokepedia.Type")
     height = models.FloatField()
     weight = models.FloatField()
     flavor_text = models.TextField()
+    evolutions = models.ManyToManyField("self")
 
     def __str__(self):
         return self.name

@@ -10,4 +10,5 @@ wheels/
 .venv
 
 # sqlite
+*sqlite*
 db.sqlite3
