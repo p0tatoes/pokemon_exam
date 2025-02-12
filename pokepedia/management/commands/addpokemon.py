@@ -8,32 +8,31 @@ from pokepedia.models import Pokemon, Type
 class Command(BaseCommand):
     help = "Retrieves data from PokeAPI (https://pokeapi.co/api/v2/) for generation 1 pokemon, and stores it to the database"
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            "--clear",
-            action="store_true",
-            help="clears existing data in the database",
-        )
+    # TODO: add option to select which generation to retrieve and store
+    # def add_arguments(self, parser):
+    #     parser.add_argument(
+    #         "--clear",
+    #         action="store_true",
+    #         help="clears existing data in the database",
+    #     )
 
-        # TODO: add option to select which generation to retrieve and store
-        # newest_generation = 9  # Update this when a new generation comes out
-        # generations = [gen for gen in range(1, newest_generation + 1)]
-        # parser.add_argument(
-        #     "generation",
-        #     type=int,
-        #     choices=generations,
-        #     help="[integer] Pokemon generation to retrieve from",
-        # )
+    # newest_generation = 9  # Update this when a new generation comes out
+    # generations = [gen for gen in range(1, newest_generation + 1)]
+    # parser.add_argument(
+    #     "generation",
+    #     type=int,
+    #     choices=generations,
+    #     help="[integer] Pokemon generation to retrieve from",
+    # )
 
     def handle(self, *args, **options):
         base_api_url = "https://pokeapi.co/api/v2"
 
         try:
-            if options["clear"]:
-                self.stdout.write(
-                    self.style.WARNING("WARNING: Deleting all existing data.")
-                )
-                call_command("flush", interactive=False)
+            self.stdout.write(
+                self.style.WARNING("WARNING: Deleting all existing data.")
+            )
+            call_command("flush", interactive=False)
 
             # create types
             # assign weaknesses
