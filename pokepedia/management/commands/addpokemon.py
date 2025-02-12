@@ -156,22 +156,25 @@ class Command(BaseCommand):
 
         return entry_list[0][key]
 
-    def _process_evolution_chain(self, chain_data, parent=None):
-        species_name = chain_data["species"]["name"]
-        try:
-            current_pokemon = Pokemon.objects.get(name=species_name)
+    def _process_evolution_chain(self, chain_data):
+        # helper function to extract pokemon names from evolution chain
+        def extract_chain_names(chain):
+            names = []
+            names.append(chain["species"]["name"])
+            for evolution in chain["evolves_to"]:
+                names.extend(extract_chain_names(evolution))
+            return names
 
-            # If there's a parent, add it to evolutions
-            if parent:
-                current_pokemon.evolutions.add(parent)
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f"SUCCESS: added evolution relationship {species_name} -> {parent.name}"
+        pokemon_names = extract_chain_names(chain_data)
+
+        pokemon_in_chain = list(Pokemon.objects.filter(name__in=pokemon_names))
+
+        for pokemon in pokemon_in_chain:
+            for evolution in pokemon_in_chain:
+                if pokemon != evolution:
+                    pokemon.evolutions.add(evolution)
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"SUCCESS: added evolution relationship {pokemon.name} <-> {evolution.name}"
+                        )
                     )
-                )
-
-            for evolution in chain_data["evolves_to"]:
-                self._process_evolution_chain(evolution, current_pokemon)
-
-        except Pokemon.DoesNotExist:
-            pass

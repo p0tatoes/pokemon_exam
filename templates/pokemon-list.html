@@ -7,7 +7,9 @@
 
     <ul>
         {% for pokemon in pokemon_list %}
-            <li>{{ pokemon }}</li>
+            <a href="{% url 'pokemon-details' pokemon.pk %}">
+                <li>{{ pokemon }}</li>
+            </a>
         {% endfor %}
     </ul>
 {% endblock content %}

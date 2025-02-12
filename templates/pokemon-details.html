@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ block.super }} | {{ pokemon.name|capfirst }}
+{% endblock title %}
+
+{% block content %}
+    <img src="{{ pokemon.image }}" alt="{{pokemon.name}}" />
+    <h1>{{ pokemon.name|capfirst }}</h1>
+    <p><i>{{ pokemon.genus }}</i></p>
+    <code>{{ pokemon.flavor_text }}</code>
+    
+    <p>Weight: {{ pokemon.weight }} hectograms</p>
+    <p>Heigh: {{ pokemon.weight }} decimeters</p>
+
+    <h3>Type:</h3>
+    {{ pokemon.types.all|unordered_list}}
+
+    <h3>Weakness:</h3>
+    <p>{{ pokemon.get_weaknesses }}</p>
+
+
+    <h3>Evolution Tree:</h1>
+    <ol>
+        {% for evolution in pokemon.evolutions.all %}
+            <li>
+                <a href="{% url 'pokemon-details' evolution.pk %}">{{ evolution.name }}</a>
+            </li>
+        {% endfor %}
+    </ol>
+
+{% endblock content %}

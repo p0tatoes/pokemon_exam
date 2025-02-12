@@ -15,6 +15,24 @@ class Pokemon(models.Model):
     def __str__(self):
         return self.name
 
+    def get_weaknesses(self):
+        results = []
+
+        types = self.types.all()
+        for pokemon_type in types:
+            weaknesses = pokemon_type.weaknesses.all()
+            for weakness in weaknesses:
+                results.append(weakness.name)
+
+        return ", ".join(results)
+
+    def get_evolutions_list(self):
+        evolutions_list = []
+        for evolution in self.evolutions.all():
+            evolutions_list.append(evolution.name)
+
+        return evolutions_list
+
 
 class Type(models.Model):
     name = models.CharField(max_length=50, unique=True)
