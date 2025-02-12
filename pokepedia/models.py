@@ -5,6 +5,7 @@ from django.db import models
 class Pokemon(models.Model):
     image = models.URLField()
     name = models.CharField(max_length=100)
+    genus = models.CharField(max_length=50)
     types = models.ManyToManyField("pokepedia.Type")
     height = models.FloatField()
     weight = models.FloatField()
