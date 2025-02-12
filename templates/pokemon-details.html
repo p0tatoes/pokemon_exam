@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{ block.super }} | {{ pokemon.name|capfirst }}
+    {{ block.super }}{{ pokemon.name|capfirst }}
 {% endblock title %}
 
 {% block content %}
-    <img src="{{ pokemon.image }}" alt="{{pokemon.name}}" />
+    <img src="{{ pokemon.image }}" alt="{{pokemon.name}}" width="200" heigh="200"/>
     <h1>{{ pokemon.name|capfirst }}</h1>
     <p><i>{{ pokemon.genus }}</i></p>
     <code>{{ pokemon.flavor_text }}</code>
-    
+
     <p>Weight: {{ pokemon.weight }} hectograms</p>
     <p>Heigh: {{ pokemon.weight }} decimeters</p>
 

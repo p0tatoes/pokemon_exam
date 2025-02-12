@@ -1,3 +1,4 @@
+from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -6,6 +7,7 @@ from django.views.generic import (
     UpdateView,
 )
 
+from pokepedia.forms import PokemonForm
 from pokepedia.models import Pokemon
 
 
@@ -23,12 +25,21 @@ class PokemonDetailView(DetailView):
 
 
 class PokemonCreateView(CreateView):
-    pass
+    model = Pokemon
+    form_class = PokemonForm
+    template_name = "pokemon-form.html"
+    success_url = reverse_lazy("pokemon-list")
 
 
 class PokemonUpdateView(UpdateView):
-    pass
+    model = Pokemon
+    form_class = PokemonForm
+    template_name = "pokemon-form.html"
+    success_url = reverse_lazy("pokemon-list")
 
 
 class PokemonDeleteView(DeleteView):
-    pass
+    model = Pokemon
+    context_object_name = "pokemon"
+    template_name = "pokemon-delete.html"
+    success_url = reverse_lazy("pokemon-list")
