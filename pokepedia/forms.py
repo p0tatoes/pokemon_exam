@@ -26,6 +26,8 @@ class PokemonForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.fields["evolutions"].required = False
+
         if self.instance and self.instance.pk:
             self.fields["evolutions"].queryset = Pokemon.objects.exclude(
                 id=self.instance.id,
