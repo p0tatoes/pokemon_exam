@@ -10,6 +10,9 @@
         <input type="submit" value="Search">
     </form>
 
+    <h3><a href="{% url 'pokemon-create' %}">Create</a></h3>
+    
+    <h3>Pokemons:</h3>
     <ul>
         {% for pokemon in pokemon_list %}
             <a href="{% url 'pokemon-details' pokemon.pk %}">

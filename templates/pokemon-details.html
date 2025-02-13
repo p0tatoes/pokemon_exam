@@ -5,6 +5,13 @@
 {% endblock title %}
 
 {% block content %}
+    <a href="{% url 'pokemon-delete' pokemon.pk%}">
+        <button>Delete</button>
+    </a>
+    <a href="{% url 'pokemon-update' pokemon.pk%}">
+        <button>Update</button>
+    </a>
+
     <img src="{{ pokemon.image }}" alt="{{pokemon.name}}" width="200" heigh="200"/>
     <h1>{{ pokemon.name|capfirst }}</h1>
     <p><i>{{ pokemon.genus }}</i></p>
