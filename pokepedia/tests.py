@@ -225,7 +225,7 @@ class PokemonViewTests(TestCase):
         }
         response = self.client.post(reverse("pokemon-create"), new_pokemon_data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         # Verify pokemon was created
         created_pokemon = Pokemon.objects.get(name="Squirtle")
@@ -321,7 +321,7 @@ class PokemonViewTests(TestCase):
         }
         response = self.client.post(reverse("pokemon-create"), new_pokemon_data)
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         # Verify pokemon was created with multiple types
         created_pokemon = Pokemon.objects.get(name="Gyarados")
@@ -343,7 +343,7 @@ class PokemonViewTests(TestCase):
             reverse("pokemon-update", kwargs={"pk": self.charizard.pk}), update_data
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         # Verify the update
         updated_pokemon = Pokemon.objects.get(pk=self.charizard.pk)
