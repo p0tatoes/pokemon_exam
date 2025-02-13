@@ -33,8 +33,12 @@ class Pokemon(models.Model):
 
         return evolutions_list
 
-    def show_types(self):
+    def get_types(self):
         return ", ".join([type.name for type in self.types.all()])
+
+    get_evolutions_list.short_description = "Evolution(s)"
+    get_types.short_description = "Type(s)"
+    get_weaknesses.short_description = "Weakness(es)"
 
 
 class Type(models.Model):
@@ -46,3 +50,8 @@ class Type(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_weaknesses(self):
+        return ", ".join([weakness.name for weakness in self.weaknesses.all()])
+
+    get_weaknesses.short_description = "Weakness(es)"

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from pokepedia.models import Pokemon
+from pokepedia.models import Pokemon, Type
 
 # Register your models here.
 
@@ -24,17 +24,37 @@ class PokemonAdmin(admin.ModelAdmin):
         ("Evolutions", {"fields": ["evolutions"]}),
     ]
     list_display = [
-        "pk",
-        "image",
         "name",
+        "flavor_text",
         "genus",
-        "show_types",
+        "get_types",
         "height",
         "weight",
-        "flavor_text",
+        "image",
     ]
     list_filter = ["types", "genus"]
     search_fields = ["name"]
 
 
+class TypeAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (
+            "Name",
+            {
+                "fields": ["name"],
+            },
+        ),
+        (
+            "Weaknesses",
+            {
+                "fields": ["weaknesses"],
+            },
+        ),
+    ]
+    list_display = ["name", "get_weaknesses"]
+    list_filter = ["weaknesses"]
+    search_fields = ["name"]
+
+
 admin.site.register(Pokemon, PokemonAdmin)
+admin.site.register(Type, TypeAdmin)
