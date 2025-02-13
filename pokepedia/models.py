@@ -33,6 +33,9 @@ class Pokemon(models.Model):
 
         return evolutions_list
 
+    def show_types(self):
+        return ", ".join([type.name for type in self.types.all()])
+
 
 class Type(models.Model):
     name = models.CharField(max_length=50, unique=True)
