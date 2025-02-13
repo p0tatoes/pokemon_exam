@@ -5,6 +5,11 @@
 {% block content %}
     <h1>Pokepedia</h1>
 
+    <form action="" method="get">
+        {{ form.as_p }}
+        <input type="submit" value="Search">
+    </form>
+
     <ul>
         {% for pokemon in pokemon_list %}
             <a href="{% url 'pokemon-details' pokemon.pk %}">

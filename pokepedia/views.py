@@ -7,7 +7,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from pokepedia.forms import PokemonForm
+from pokepedia.forms import PokemonForm, PokemonSearchForm
 from pokepedia.models import Pokemon
 
 
@@ -16,6 +16,45 @@ class PokemonListView(ListView):
     model = Pokemon
     context_object_name = "pokemon_list"
     template_name = "pokemon-list.html"
+
+    form = PokemonSearchForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form"] = self.form
+
+        return context
+
+    # def get(self, request, *args, **kwargs):
+    #     form = PokemonSearchForm(self.request.GET)
+    #     pokemon_list
+    #     if form.is_valid():
+    #         pokemon_name = form.cleaned_data["pokemon_name"]
+    #         pokemon_type = form.cleaned_data["pokemon_type"]
+    #         self.queryset = Pokemon.objects.filter(name=pokemon_name).filter(
+    #             types_name__contains=pokemon_type
+    #         )
+
+    #     return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        form = PokemonSearchForm(self.request.GET)
+
+        if form.is_valid():
+            pokemon_name = form.cleaned_data["pokemon_name"]
+            pokemon_type = form.cleaned_data["pokemon_type"]
+
+            if pokemon_name and pokemon_type:
+                queryset = Pokemon.objects.filter(name__icontains=pokemon_name).filter(
+                    types__name=pokemon_type
+                )
+            elif pokemon_name:
+                queryset = Pokemon.objects.filter(name__icontains=pokemon_name)
+            elif pokemon_type:
+                queryset = Pokemon.objects.filter(types__name=pokemon_type)
+
+        return queryset
 
 
 class PokemonDetailView(DetailView):
