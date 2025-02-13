@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -25,18 +26,6 @@ class PokemonListView(ListView):
 
         return context
 
-    # def get(self, request, *args, **kwargs):
-    #     form = PokemonSearchForm(self.request.GET)
-    #     pokemon_list
-    #     if form.is_valid():
-    #         pokemon_name = form.cleaned_data["pokemon_name"]
-    #         pokemon_type = form.cleaned_data["pokemon_type"]
-    #         self.queryset = Pokemon.objects.filter(name=pokemon_name).filter(
-    #             types_name__contains=pokemon_type
-    #         )
-
-    #     return super().get(request, *args, **kwargs)
-
     def get_queryset(self):
         queryset = super().get_queryset()
         form = PokemonSearchForm(self.request.GET)
@@ -63,21 +52,21 @@ class PokemonDetailView(DetailView):
     template_name = "pokemon-details.html"
 
 
-class PokemonCreateView(CreateView):
+class PokemonCreateView(LoginRequiredMixin, CreateView):
     model = Pokemon
     form_class = PokemonForm
     template_name = "pokemon-form.html"
     success_url = reverse_lazy("pokemon-list")
 
 
-class PokemonUpdateView(UpdateView):
+class PokemonUpdateView(LoginRequiredMixin, UpdateView):
     model = Pokemon
     form_class = PokemonForm
     template_name = "pokemon-form.html"
     success_url = reverse_lazy("pokemon-list")
 
 
-class PokemonDeleteView(DeleteView):
+class PokemonDeleteView(LoginRequiredMixin, DeleteView):
     model = Pokemon
     context_object_name = "pokemon"
     template_name = "pokemon-delete.html"

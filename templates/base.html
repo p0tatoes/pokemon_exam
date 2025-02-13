@@ -7,6 +7,15 @@
 </head>
 <body>
     <main>
+        {% if user.is_authenticated %}
+            <p>Welcome, {{ user.first_name }} {{ user.last_name }}</p>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+
+                <input type="submit" value="Logout">
+            </form>
+        {% endif %}
+
         {% block content %}{% endblock content%}
     </main>
     <footer>

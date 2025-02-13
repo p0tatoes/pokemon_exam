@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{block.super}}{% endblock title %}
+{% block title %}{{block.super}}Home{% endblock title %}
 
 {% block content %}
     <h1>Pokepedia</h1>
@@ -15,6 +15,8 @@
             <a href="{% url 'pokemon-details' pokemon.pk %}">
                 <li>{{ pokemon }}</li>
             </a>
+        {% empty %}
+            <h1>No Pokemon Found.</h1>
         {% endfor %}
     </ul>
 {% endblock content %}

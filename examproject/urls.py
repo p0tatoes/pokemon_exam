@@ -16,9 +16,19 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import include, path
+from django.contrib.auth.views import LogoutView
+from django.urls import include, path, reverse_lazy
+
+from examproject.views import LoginUserView, RegisterUserView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("pokepedia/", include("pokepedia.urls")),
+    path("register/", RegisterUserView.as_view(), name="register"),
+    path("login/", LoginUserView.as_view(), name="login"),
+    path(
+        "logout/",
+        LogoutView.as_view(next_page=reverse_lazy("pokemon-list")),
+        name="logout",
+    ),
 ]
